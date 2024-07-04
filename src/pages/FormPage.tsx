@@ -80,7 +80,7 @@ const FormPage: React.FC = () => {
   };
 
   return (
-    <Container maxWidth="sm">
+    <Container maxWidth="sm" style={{ marginTop: '20px', marginBottom: '20px' }}>
       <motion.div
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}

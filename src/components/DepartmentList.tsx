@@ -2,18 +2,8 @@
 import React, { useState } from 'react';
 import { List, ListItem, Collapse, IconButton, Checkbox, FormControlLabel } from '@mui/material';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
+import { motion } from 'framer-motion';
 import { departments } from '../data/departments';
-
-// interface Department {
-//   id: number;
-//   name: string;
-//   subDepartments: SubDepartment[];
-// }
-
-// interface SubDepartment {
-//   id: number;
-//   name: string;
-// }
 
 const DepartmentList: React.FC = () => {
   const [open, setOpen] = useState<{ [key: number]: boolean }>({});
@@ -44,7 +34,12 @@ const DepartmentList: React.FC = () => {
   return (
     <List>
       {departments.map((department) => (
-        <div key={department.id}>
+        <motion.div
+          key={department.id}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
+        >
           <ListItem>
             <FormControlLabel
               control={
@@ -60,23 +55,37 @@ const DepartmentList: React.FC = () => {
             </IconButton>
           </ListItem>
           <Collapse in={open[department.id]} timeout="auto" unmountOnExit>
-            <List component="div" disablePadding>
-              {department.subDepartments.map((subDepartment) => (
-                <ListItem key={subDepartment.id} sx={{ pl: 4 }}>
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={!!selected[subDepartment.id]}
-                        onChange={() => handleSelect(subDepartment.id, true, department.id)}
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <List component="div" disablePadding>
+                {department.subDepartments.map((subDepartment) => (
+                  <motion.div
+                    key={subDepartment.id}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.3, delay: 0.1 }}
+                  >
+                    <ListItem sx={{ pl: 4 }}>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={!!selected[subDepartment.id]}
+                            onChange={() => handleSelect(subDepartment.id, true, department.id)}
+                          />
+                        }
+                        label={subDepartment.name}
                       />
-                    }
-                    label={subDepartment.name}
-                  />
-                </ListItem>
-              ))}
-            </List>
+                    </ListItem>
+                  </motion.div>
+                ))}
+              </List>
+            </motion.div>
           </Collapse>
-        </div>
+        </motion.div>
       ))}
     </List>
   );
